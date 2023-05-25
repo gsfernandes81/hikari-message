@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "hikari-message"
+version = "0.1.0"
+description = "A Hikari / Discord library with utilities for manipulating messages and embeds"
+authors = ["GS729"]
+license = "GNU AFFERO GENERAL PUBLIC LICENSE VERSION 3"
+readme = "README.md"
+packages = [{include = "hmessage"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+yarl = "^1.9.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+pyflakes = "^3.0.1"
+bandit = "^1.7.5"
+rope = "^1.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
