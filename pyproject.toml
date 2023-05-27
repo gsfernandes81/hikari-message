@@ -8,8 +8,10 @@ readme = "README.md"
 packages = [{include = "hmessage"}]
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.9,<3.12"
 yarl = "^1.9.2"
+attrs = ">=22.2,<24.0"
+hikari = ">=2.0.0.dev115"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
