@@ -126,6 +126,7 @@ class HMessage:
         embed_no: int = -1,
         designator: int = 0,
         new_embed: bool = False,
+        default_url: str = None,
     ) -> "HMessage":
         """Merge the attachments of a message into the embed.
 
@@ -152,6 +153,7 @@ class HMessage:
                 for attachment in self.attachments
                 if str(attachment.media_type).startswith("image")
             ],
+            default_url=default_url,
         )
 
         for embed in embeds[::-1]:
