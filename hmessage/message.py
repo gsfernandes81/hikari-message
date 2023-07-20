@@ -17,6 +17,7 @@ class HMessage:
     embeds: t.List[h.Embed] = attr.ib(default=attr.Factory(list))
     embed_default_colour: h.Color = attr.ib(default=DEFAULT_COLOR, converter=h.Color)
     attachments: t.List[h.Attachment] = attr.ib(default=attr.Factory(list))
+    id: t.Optional[int] = attr.ib(default=0, converter=int)
 
     @content.validator
     def _validate_content(self, attribute, value):
@@ -42,6 +43,7 @@ class HMessage:
             content=message.content or "",
             embeds=message.embeds,
             attachments=message.attachments,
+            id=message.id,
         )
 
     def to_message_kwargs(self) -> t.Dict[str, t.Any]:
