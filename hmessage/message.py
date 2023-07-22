@@ -103,6 +103,15 @@ class HMessage:
     def merge_embed_url_as_embed_image_into_embed(
         self, embed_no: int = 0, designator: int = 0
     ) -> "HMessage":
+        self.merge_url_as_image_into_embed(
+            self.embeds[embed_no].url, embed_no, designator
+        )
+        self.embeds[embed_no].url = None
+        return self
+
+    def merge_url_as_image_into_embed(
+        self, url: str, embed_no: int = 0, designator: int = 0
+    ):
         if not self.embeds:
             self.embeds = [h.Embed(color=DEFAULT_COLOR)]
 
@@ -112,13 +121,17 @@ class HMessage:
         embeds = MultiImageEmbedList.from_embed(
             embed,
             designator,
-            [embed.url],
+            [url],
         )
-        embeds[0].set_thumbnail(None)
 
         for embed in embeds[::-1]:
             self.embeds.insert(embed_no, embed)
 
+        return self
+
+    def remove_all_embed_thumbnails(self):
+        for embed in self.embeds:
+            embed.set_thumbnail(None)
         return self
 
     def merge_attachements_into_embed(
