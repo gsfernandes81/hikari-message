@@ -28,9 +28,7 @@ class MultiImageEmbedList(list):
             )
 
         if not kwargs.get("description"):
-            raise ValueError(
-                "Must set description property when using MultiImageEmbedList."
-            )
+            kwargs["description"] = ""
 
         if not kwargs.get("color") or kwargs.get("colour"):
             kwargs["color"] = DEFAULT_COLOR
@@ -62,7 +60,7 @@ class MultiImageEmbedList(list):
         if self[-1].image:
             embed = h.Embed(
                 url=self[0].url,
-                description="Masked description",
+                description="",
                 color=DEFAULT_COLOR,
             )
             embed.set_image(image)
