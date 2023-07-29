@@ -61,8 +61,13 @@ class HMessage:
                 f"Cannot add MessagePrototype to {other.__class__.__name__}"
             )
 
+        if self.content.endswith("\n") or other.content.startswith("\n"):
+            use_endline = False
+        else:
+            use_endline = True
+
         return self.__class__(
-            content=self.content + other.content,
+            content=(self.content + ("\n" if use_endline else "") + other.content),
             embeds=self.embeds + other.embeds,
             attachments=self.attachments + other.attachments,
         )
