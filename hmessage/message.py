@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import typing as t
 
 import attr
@@ -117,6 +118,10 @@ class HMessage:
     def merge_url_as_image_into_embed(
         self, url: str, embed_no: int = 0, designator: int = 0
     ):
+        if url is None:
+            logging.warning("Cannot merge NoneType URL into embed")
+            return
+
         if not self.embeds:
             self.embeds = [h.Embed(color=DEFAULT_COLOR)]
 
