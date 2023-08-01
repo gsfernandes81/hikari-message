@@ -33,7 +33,7 @@ class MultiImageEmbedList(list):
         if not kwargs.get("color") or kwargs.get("colour"):
             kwargs["color"] = DEFAULT_COLOR
 
-        url: yarl.URL = yarl.URL(url)
+        url: yarl.URL = yarl.URL(str(url))
         # Get the DESIGNATOR_PARAMETER from the url query
         # if it doesn't exist then use the designator parameter from the function
         # args.
