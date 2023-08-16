@@ -43,7 +43,7 @@ class HMessage:
         return cls(
             content=message.content or "",
             embeds=message.embeds,
-            attachments=message.attachments,
+            attachments=[att.url for att in message.attachments],
             id=message.id,
         )
 
