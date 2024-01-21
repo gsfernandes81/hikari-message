@@ -10,15 +10,54 @@ from .constants import DEFAULT_COLOR
 from .embed import MultiImageEmbedList
 
 
+class HMessageEmbed(h.Embed):
+    def __eq__(self, other: t.Any) -> bool:
+        if not isinstance(other, type(self)):
+            if isinstance(other, h.Embed):
+                other = type(self).from_embed(other)
+            else:
+                return False
+
+        for attrsib in self.__slots__:
+            # Image equality override
+            if attrsib == "_image":
+                if str(getattr(self, attrsib).url) != str(getattr(other, attrsib).url):
+                    break
+            elif getattr(self, attrsib) != getattr(other, attrsib):
+                break
+        else:
+            return True
+        return False
+
+    @classmethod
+    def from_embed(cls, embed: h.Embed):
+        return cls.from_received_embed(
+            title=embed._title,
+            description=embed._description,
+            url=embed._url,
+            color=embed._color,
+            timestamp=embed._timestamp,
+            image=embed._image,
+            thumbnail=embed._thumbnail,
+            video=embed._video,
+            author=embed._author,
+            provider=embed._provider,
+            footer=embed._footer,
+            fields=embed._fields,
+        )
+
+
 @attr.s
 class HMessage:
     """A prototype for a message to be sent to a channel."""
 
     content: str = attr.ib(default="", converter=str)
     embeds: t.List[h.Embed] = attr.ib(default=attr.Factory(list))
-    embed_default_colour: h.Color = attr.ib(default=DEFAULT_COLOR, converter=h.Color)
+    embed_default_colour: h.Color = attr.ib(
+        default=DEFAULT_COLOR, converter=h.Color, eq=False
+    )
     attachments: t.List[h.Attachment] = attr.ib(default=attr.Factory(list))
-    id: t.Optional[int] = attr.ib(default=0, converter=int)
+    id: t.Optional[int] = attr.ib(default=0, converter=int, eq=False)
 
     @content.validator
     def _validate_content(self, attribute, value):
@@ -42,7 +81,7 @@ class HMessage:
         """Create a MessagePrototype instance from a message."""
         return cls(
             content=message.content or "",
-            embeds=message.embeds,
+            embeds=[HMessageEmbed.from_embed(embed) for embed in message.embeds],
             attachments=[att.url for att in message.attachments],
             id=message.id,
         )
