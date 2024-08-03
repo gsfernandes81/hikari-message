@@ -207,24 +207,26 @@ class HMessage:
 
         embed_no = int(embed_no) % len(self.embeds)
 
+        attachments_to_embeds_list = []
+        attachments_remaining_list = []
+        for attachment in self.attachments:
+            if hasattr(attachment, "media_type") and str(
+                attachment.media_type
+            ).startswith("image"):
+                attachments_to_embeds_list.append(attachment.url)
+            else:
+                attachments_remaining_list.append(attachment)
+
         embeds = MultiImageEmbedList.from_embed(
             self.embeds.pop(embed_no),
             designator,
-            [
-                attachment.url
-                for attachment in self.attachments
-                if str(attachment.media_type).startswith("image")
-            ],
+            attachments_to_embeds_list,
             default_url=default_url,
         )
 
         for embed in embeds[::-1]:
             self.embeds.insert(embed_no, embed)
 
-        self.attachments = [
-            attachment
-            for attachment in self.attachments
-            if not str(attachment.media_type).startswith("image")
-        ]
+        self.attachments = attachments_remaining_list
 
         return self
